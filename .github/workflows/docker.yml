@@ -2,11 +2,9 @@ name: Docker Build and Run
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
   build:
@@ -28,9 +26,7 @@ jobs:
             ${{ runner.os }}-buildx-
 
       - name: Build Docker image
-        run: |
-          docker build --progress=plain -t mydockerapp ./python-image
+        run: docker build -t mydockerapp ./python-image
 
       - name: Run Docker container
-        run: |
-          docker run -d --name mydockerapp-container mydockerapp
+        run: docker run -d -p 5000:5000 --name mydockerapp-container mydockerapp
