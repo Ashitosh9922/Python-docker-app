@@ -35,12 +35,13 @@ jobs:
       run: |
         docker run -d -p 5000:5000 --name mydockerapp-container mydockerapp
         docker ps
+        sleep 10  # Wait for 10 seconds to ensure Flask is fully up
 
     - name: Test Flask API with curl
       run: |
-        curl http://localhost:5000/
-        curl http://localhost:5000/time
-        curl http://localhost:5000/status
+        curl --max-time 30 http://localhost:5000/
+        curl --max-time 30 http://localhost:5000/time
+        curl --max-time 30 http://localhost:5000/status
 
     - name: Check Docker container logs
       run: |
