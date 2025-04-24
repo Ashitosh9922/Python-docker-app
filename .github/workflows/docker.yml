@@ -33,10 +33,15 @@ jobs:
 
     - name: Run Docker container
       run: |
-        docker run -d --name mydockerapp-container mydockerapp
+        docker run -d -p 5000:5000 --name mydockerapp-container mydockerapp
+        docker ps
 
     - name: Test Flask API with curl
       run: |
         curl http://localhost:5000/
         curl http://localhost:5000/time
         curl http://localhost:5000/status
+
+    - name: Check Docker container logs
+      run: |
+        docker logs mydockerapp-container
