@@ -1,20 +1,41 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from datetime import datetime
+import random
 
 app = Flask(__name__)
 
-@app.route("/")
+# Route 1: Home page
+@app.route('/')
 def home():
-    return "👋 Hello! Welcome to my Dockerized Flask App!"
+    return jsonify(message="👋 Hello! Welcome to my Dockerized Flask App!")
 
-@app.route("/time")
+# Route 2: Get current server time
+@app.route('/time')
 def time():
-    now = datetime.now()
-    return jsonify({"current_time": now.strftime("%Y-%m-%d %H:%M:%S")})
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return jsonify(current_time=current_time)
 
-@app.route("/status")
+# Route 3: Health check
+@app.route('/status')
 def status():
-    return jsonify({"status": "Running", "message": "App is healthy!"})
+    return jsonify(message="App is healthy!", status="Running")
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+# Route 4: Random quote
+@app.route('/quote')
+def quote():
+    quotes = [
+        "The only way to do great work is to love what you do. – Steve Jobs",
+        "Life is what happens when you're busy making other plans. – John Lennon",
+        "It does not matter how slowly you go as long as you do not stop. – Confucius",
+        "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill"
+    ]
+    return jsonify(quote=random.choice(quotes))
+
+# Route 5: Greet the user
+@app.route('/greet', methods=['GET'])
+def greet():
+    name = request.args.get('name', 'Stranger')
+    return jsonify(message=f"Hello, {name}!")
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
